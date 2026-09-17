@@ -1,0 +1,22 @@
+model:
+  default: deepseek-v4-pro
+  provider: deepseek
+  base_url: https://api.deepseek.com/v1
+agent:
+  max_turns: 12
+web:
+  backend: ddgs
+  fetch_max_chars: 8000
+  search_limit: 5
+  result_limit: 15
+  source_timeout_sec: 15
+  fetch_timeout_sec: 20
+  github_trending_since: weekly
+  github_trending_language: ""
+  sources:
+    ddgs: true
+    arxiv: true
+    github_search: true
+    github_trending: true
+    hf_daily: true
+output_dir: output
