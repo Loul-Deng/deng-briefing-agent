@@ -1,7 +1,4 @@
 """拼出本轮固定的 system prompt。
-
-对话中途不要改这段（Hermes 把 prompt cache 当前缀稳定；我们至少做到身份和简报契约不变）。
-日期只在开场时写入一次。
 """
 
 from __future__ import annotations
