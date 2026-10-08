@@ -4,6 +4,10 @@ model:
   base_url: https://api.deepseek.com/v1
 agent:
   max_turns: 12
+  max_minutes: 8
+  max_tokens: 150000
+history:
+  url_limit: 40
 web:
   backend: ddgs
   fetch_max_chars: 8000

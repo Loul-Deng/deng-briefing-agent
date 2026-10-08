@@ -21,14 +21,26 @@ def create_client(cfg: dict[str, Any]) -> OpenAI:
     return OpenAI(api_key=api_key, base_url=base_url)
 
 
+def _usage_dict(completion: Any) -> dict[str, int]:
+    """取出本轮 token。供应商没给 usage 时按 0 计，不能因此把循环打崩。"""
+    raw = getattr(completion, "usage", None)
+    prompt_tokens = int(getattr(raw, "prompt_tokens", 0) or 0)
+    completion_tokens = int(getattr(raw, "completion_tokens", 0) or 0)
+    return {
+        "prompt_tokens": prompt_tokens,
+        "completion_tokens": completion_tokens,
+        "total_tokens": prompt_tokens + completion_tokens,
+    }
+
+
 def chat(
     client: OpenAI,
     *,
     model: str,
     messages: list[dict[str, Any]],
     tools: list[dict[str, Any]],
-) -> Any:
-    """发起一轮 chat.completions。有 tools 时让模型自己决定是否 tool_choice=auto。"""
+) -> tuple[Any, dict[str, int]]:
+    """发起一轮 chat.completions。返回 message 和 usage。有 tools 时 tool_choice=auto。"""
     kwargs: dict[str, Any] = {
         "model": model,
         "messages": messages,
@@ -37,4 +49,4 @@ def chat(
         kwargs["tools"] = tools
         kwargs["tool_choice"] = "auto"
     completion = client.chat.completions.create(**kwargs)
-    return completion.choices[0].message
+    return completion.choices[0].message, _usage_dict(completion)

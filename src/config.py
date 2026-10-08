@@ -26,3 +26,4 @@ def output_dir(cfg: dict[str, Any] | None = None) -> Path:
     cfg = cfg if cfg is not None else load_config()
     rel = cfg.get("output_dir") or "output"
     return (ROOT / rel).resolve()
+                                      
